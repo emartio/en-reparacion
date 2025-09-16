@@ -1,33 +1,153 @@
-<!DOCTYPE html>
+<!-- Landing_contacto.html
+Simple landing page de contacto en un solo archivo HTML.
+Reemplaza FORM_ENDPOINT por tu endpoint de Formspree o similar, o deja vacío para usar mailto como fallback.
+-->
+
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gol dominios</title>
-<style>
-  body {
-    background-color: black;
-    color: yellow;
-    font-family: Arial, sans-serif;
-    text-align: center;
-  }
-
-  .spacer {
-    margin-top: 20px; /* Espacio entre las dos oraciones */
-  }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contacto — Tu Empresa</title>
+  <meta name="description" content="Contacto rápido. Escribe y nos pondremos en contacto." />
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#6ee7b7;--muted:#94a3b8;--glass: rgba(255,255,255,0.03)}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      background:linear-gradient(180deg, #071029 0%, #07121a 60%); color:#e6eef6;
+      display:flex; align-items:center; justify-content:center; padding:24px;
+    }
+    .wrap{width:100%; max-width:720px}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:14px; padding:32px; box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      border:1px solid rgba(255,255,255,0.04);
+    }
+    header{display:flex; align-items:center; gap:16px}
+    .logo{
+      width:56px; height:56px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(135deg,var(--accent), #34d399); color:#042027; font-weight:700; font-size:18px;
+      box-shadow: 0 4px 18px rgba(102,126,234,0.08);
+    }
+    h1{margin:0; font-size:20px}
+    p.lead{margin:6px 0 18px; color:var(--muted)}
+    form{display:grid; gap:12px}
+    label{font-size:13px; color:var(--muted)}
+    input[type=text], input[type=email], textarea{
+      width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.04);
+      background:var(--glass); color:inherit; font-size:14px; outline:none; resize:vertical
+    }
+    textarea{min-height:120px}
+    .row{display:flex; gap:12px}
+    .btn{
+      display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:10px; border:0;
+      cursor:pointer; background:linear-gradient(90deg,var(--accent), #34d399); color:#042027; font-weight:600; font-size:15px;
+    }
+    .mutebtn{background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.04);}
+    .note{font-size:13px; color:var(--muted)}
+    .center{display:flex; gap:8px; align-items:center}
+    .success{background:rgba(110,231,183,0.12); color:var(--accent); padding:10px 12px; border-radius:8px;}
+    footer{margin-top:18px; display:flex; justify-content:space-between; align-items:center}
+    @media (max-width:520px){ .row{flex-direction:column} header{gap:12px} .logo{width:48px;height:48px}}
+  </style>
 </head>
 <body>
-  <div>
-    <p>
-      <br>
-Este dominio ha sido registrado y NO es una página oficial ni está asociada a ninguna entidad bancaria. No intentar loguearse.
-      <br>
-Contacto: goldominios@gmail.com</p>
+  <div class="wrap">
+    <div class="card" role="region" aria-label="Contacto">
+      <header>
+        <div class="logo">Itaú</div>
+        <div>
+          <h1>"Itaú.com" y "Itaú.com.uy" - Podrian estar a la venta</h1>
+          <p class="lead">Dejá tu mensaje y te respondemos a la brevedad.</p>
+        </div>
+      </header>
 
-    <!-- Start of CuterCounter Code -->
-<a href="https://www.cutercounter.com/" target="_blank"><img src="https://www.cutercounter.com/hits.php?id=hexpfqcx&nd=6&style=31" border="0" alt="visitor counter"></a>
-<!-- End of CuterCounter Code -->
+      <form id="contactForm" autocomplete="on">
+        <div>
+          <label for="name">Nombre</label>
+          <input id="name" name="name" type="text" placeholder="Tu nombre" required />
+        </div>
+        <div>
+          <label for="email">Mail</label>
+          <input id="email" name="email" type="email" placeholder="tu@ejemplo.com" required />
+        </div>
+        <div>
+          <label for="message">Mensaje</label>
+          <textarea id="message" name="message" placeholder="Ingrese su mensaje, agradecemos que el mensaje contenga el montó ofrecido" required></textarea>
+        </div>
+
+        <div class="row">
+          <button class="btn" type="submit">Enviar mensaje</button>
+          <button type="button" id="mailtoBtn" class="btn mutebtn">Enviar por mail</button>
+        </div>
+
+        <p class="note">Si preferís, podés enviar un email directo a <strong>goldominios@gmail.com</strong> (reemplazá por tu mail real).</p>
+
+        <div id="status" aria-live="polite" style="margin-top:8px"></div>
+      </form>
+
+      <footer>
+        <div class="note">Hecho con ❤ — Dominios Gol</div>
+        <div class="note">Privacidad: no compartimos tus datos.</div>
+      </footer>
+    </div>
   </div>
- </body>
+
+  <script>
+    // CONFIG: reemplaza por tu endpoint de Formspree u otro servicio.
+    const FORM_ENDPOINT = "https://formspree.io/f/mqadvzog"; // ej:https://formspree.io/f/mqadvzog
+    const defaultMail = "goldominios@gmail.com"; // reemplazar
+
+    const form = document.getElementById('contactForm');
+    const status = document.getElementById('status');
+    const mailtoBtn = document.getElementById('mailtoBtn');
+
+    mailtoBtn.addEventListener('click', ()=>{
+      const name = encodeURIComponent(document.getElementById('name').value || '');
+      const email = encodeURIComponent(document.getElementById('email').value || '');
+      const msg = encodeURIComponent(document.getElementById('message').value || '');
+      const subject = encodeURIComponent('Contacto desde landing - ' + (name || 'sin nombre'));
+      const body = `Nombre: ${name}%0D%0AMail: ${email}%0D%0A%0D%0A${msg}`;
+      window.location.href = `mailto:${defaultMail}?subject=${subject}&body=${body}`;
+    });
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      status.innerHTML = '';
+
+      const data = {
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        message: form.message.value.trim()
+      };
+
+      if(!data.name || !data.email || !data.message){
+        status.innerHTML = '<div class="success" style="background:transparent;color:#ffb6b3">Por favor completá todos los campos.</div>';
+        return;
+      }
+
+      if(!FORM_ENDPOINT){
+        status.innerHTML = '<div class="success">No hay endpoint configurado. Usá el botón "Enviar por mail" o configurá FORM_ENDPOINT.</div>';
+        return;
+      }
+
+      try{
+        const resp = await fetch(FORM_ENDPOINT, {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(data)
+        });
+        if(resp.ok){
+          status.innerHTML = '<div class="success">Mensaje enviado. Gracias — te contactamos pronto.</div>';
+          form.reset();
+        } else {
+          status.innerHTML = '<div class="success" style="background:transparent;color:#ffb6b3">Hubo un error al enviar. Probá con el botón de mail.</div>';
+        }
+      }catch(err){
+        status.innerHTML = '<div class="success" style="background:transparent;color:#ffb6b3">Error de red. Usá el botón de mail.</div>';
+      }
+    });
+  </script>
+</body>
 </html>
